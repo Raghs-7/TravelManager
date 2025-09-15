@@ -23,15 +23,6 @@ Instructions to Compile and Run --->
 1. Open the terminal and navigate to the project source directory.
 
 2. run javac Abstract/*.java Interface/*.java myException/*.java Vehicle/*.java *.java
-- To test persistence functionality:
-    - The system supports saving the fleet to a CSV file.
-    - Example file for testing: sample_fleet.csv
-
-- To save the current fleet state to a file:
-    - Use the CLI menu option: "Save Fleet".
-
-- To load a fleet from a file:
-    - Use the CLI menu option: "Load Fleet" and specify the filename (e.g., sample_fleet.csv).
 
 ---------------------------------------------------------------------------------------------------------
 
@@ -73,10 +64,20 @@ Car,C001,HondaCivic,180.0,4,50.0,5,3
 
 (1) Load Fleet from File
 - Choose option: `8 (Load Fleet)`
-- Enter filename: `input.txt`
+- Enter filename: `Demo.csv`
 
 Expected Output:
-    Data Loaded from input.txt successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Vehicle added Successfully
+Data Loaded from Demo.csv successfully
 
 
 (2) Generate Initial Report
@@ -84,7 +85,7 @@ Expected Output:
 
 Expected Output:
 Total Vehicles: 10
-By Type -> Cars:2 Trucks:2 Buses:2 Planes:1 Ships:3
+By Type -> Cars:2 Trucks:2 Buses:2 Planes:1 Ships:3 
 Average Fuel Efficiency   : 8.30 km/l
 Total Mileage             : 0.00 km
 Vehicle Needs Maintenance : 0
@@ -117,6 +118,16 @@ All Vehicle are refueled successfully
 - Choose option: `5 (Perform Maintenance)`
 
 Expected Output:
+Maintenance is Done 
+Maintenance is Done
+Maintenance is Done
+Maintenance is Done
+Maintenance is Done
+Maintenance is Done
+Maintenance is Done
+Maintenance is Done
+Maintenance is Done
+Maintenance is Done
 Successfully performed Maintenance
 
 (5) Start Journey (Distance: 100.00)
@@ -140,18 +151,18 @@ Started all the journeys
 - Choose option: `6 (Generate Report)`
 
 Expected Output:
+Total Vehicles: 10
 By Type -> Cars:2 Trucks:2 Buses:2 Planes:1 Ships:3
 Average Fuel Efficiency   : 8.30 km/l
 Total Mileage             : 1000.00 km
 Vehicle Needs Maintenance : 0
 
-
 (7) Save Fleet to File
 - Choose option: `7 (Save Fleet)`
-- Enter filename: `output.txt`
+- Enter filename: `output.csv`
 
 Expected Output:
-Data Saved to output.txt successfully
+Data Saved to output.csv successfully
 
 
 (8) Search Vehicles by Type "Car"
@@ -159,7 +170,6 @@ Data Saved to output.txt successfully
 - Enter type: `Car`
 
 Expected Output:
-Car
 Car
 ID: C001, Model: HondaCivic, Max Speed: 180.00, Current Mileage: 100.00, Total Distance Traveled: 300.00
 Car
@@ -170,7 +180,7 @@ ID: C002, Model: ToyotaCorolla, Max Speed: 170.00, Current Mileage: 100.00, Tota
 - Choose option: `10 (List Vehicles Needing Maintenance)`
 
 Expected Output:
-No Vehicle Needs Maintenance
+No vehicles need maintenance.
 
 (10) Remove Vehicle by ID "T001"
 - Choose option: `2 (Remove Vehicle)`
