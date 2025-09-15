@@ -1,0 +1,7 @@
+Car,C002,ToyotaCorolla,170.0,0.0,4,145.0,5,4
+Truck,T002,ScaniaTruck,110.0,0.0,8,220.0,500.0,8000.0
+Bus,B001,MercedesBus,100.0,0.0,8,300.0,50,40,500.0,3000.0
+Bus,B002,VWBus,90.0,0.0,6,280.0,50,30,500.0,2500.0
+AirPlane,A001,Boeing747,900.0,0.0,10000.0,10100.0,200,300,10000.0,5000.0
+CargoShipFuel,C004,Maersk,40.0,0.0,false,50000.0,0.0
+CargoShipFuel,C005,HapagLloyd,35.0,0.0,false,50000.0,0.0

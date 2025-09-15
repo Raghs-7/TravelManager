@@ -1,0 +1,10 @@
+package Interface;
+
+import myException.*;
+
+public interface PassengerCarrier {
+    void boardPassengers(int count) throws OverloadException;
+    void disembarkPassengers(int count) throws InvalidOperationException;
+    int getPassengerCapacity();
+    int getCurrentpassengers();
+}
