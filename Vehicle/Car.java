@@ -20,7 +20,7 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
 
     // Maintainable methods
     public void scheduleMaintenance(){
-        this.maintenanceNeeded = true;
+        this.maintenanceNeeded = this.needsMaintencance();
     }
     public boolean needsMaintencance(){
         double Mileage = getCurrentMileage();

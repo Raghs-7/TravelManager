@@ -21,7 +21,7 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
 
     // Maintainable methods
     public void scheduleMaintenance(){
-        this.maintenanceNeeded = true;
+        this.maintenanceNeeded = this.needsMaintencance();
     }
     public boolean needsMaintencance(){
         double Mileage = getCurrentMileage();

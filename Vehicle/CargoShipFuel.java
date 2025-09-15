@@ -22,7 +22,7 @@ public class CargoShipFuel extends WaterVehicle implements CargoCarrier, Maintai
 
     // Maintainable methods
     public void scheduleMaintenance(){
-        if (this.needsMaintencance()) this.maintenanceNeeded = true;
+        this.maintenanceNeeded = this.needsMaintencance();
     }
     public boolean needsMaintencance(){
         double Mileage = this.getCurrentMileage();

@@ -194,6 +194,10 @@ public class Main {
             }
          } else if (option == 10) {
             ArrayList<Vehicle> vehiclesNeedingMaintenance = fleetManager.getVehicleNeedingMaintenance();
+            if (vehiclesNeedingMaintenance.size() == 0) {
+               System.out.println("No vehicles need maintenance.");
+               continue;
+            }
             for (Vehicle v : vehiclesNeedingMaintenance) {
                System.out.println(v.getClass().getSimpleName());
                v.displayInfo();
