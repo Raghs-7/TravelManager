@@ -17,6 +17,12 @@ public class CargoShipSail extends WaterVehicle implements Maintainable, CargoCa
         this.CurrentCargo = CurrentCargo;
     }
 
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.printf("Current Cargo: %.2f, Cargo Capacity: %d, Maintenance Needed: %b\n", CurrentCargo, CargoCapacity, maintenanceNeeded);
+    }
+
     // Maintainable methods
     public void scheduleMaintenance(){
         this.maintenanceNeeded = this.needsMaintencance();
@@ -59,7 +65,7 @@ public class CargoShipSail extends WaterVehicle implements Maintainable, CargoCa
     public void move(double distance) throws InsufficientFuelException{
         setCurrentMileage(getCurrentMileage() + distance);
         this.updateTotalDistanceTraveled(distance);
-        System.out.println(distance + " km, Sailing with cargo .." );
+        System.out.println("Vehicle VID: "+this.getId() + ", Sailing with cargo .." + distance + " km");
     }
 
     @Override

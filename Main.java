@@ -149,6 +149,8 @@ public class Main {
          } 
          else if (option == 6) {
             System.out.println(fleetManager.generateReport());
+            System.out.println();
+            fleetManager.generateIndividualReport();
          } 
          else if (option == 7) {
             System.out.println("Enter the file name you want to save the data");

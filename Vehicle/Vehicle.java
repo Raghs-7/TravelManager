@@ -22,14 +22,14 @@ public abstract class Vehicle implements Comparable<Vehicle>{
     public abstract double estimateJourneyTime(double distance);
 
     public void displayInfo() {
-        System.out.printf("ID: %s, Model: %s, Max Speed: %.2f, Current Mileage: %.2f, Total Distance Traveled: %.2f\n", id, model, maxSpeed, currentMileage, totalDistanceTraveled);
+        System.out.printf("ID: %s, Model: %s, Max Speed: %.2f, Current Mileage: %.2f, Total Distance Traveled: %.2f, ", id, model, maxSpeed, currentMileage, totalDistanceTraveled);
     }
 
     public void updateTotalDistanceTraveled(double distance){
         this.totalDistanceTraveled += distance;
     }
 
-    public void setCurrentMileage(double curr){
+    protected void setCurrentMileage(double curr){
             this.currentMileage = curr;
     }
 

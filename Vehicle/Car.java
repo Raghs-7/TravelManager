@@ -18,6 +18,12 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         this.Currentpassengers = Currentpassengers;
     }
 
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.printf("Fuel Level: %.2f, Current Passengers: %d, Passenger Capacity: %d, Maintenance Needed: %b\n", fuellevel, Currentpassengers, PassengerCapacity, maintenanceNeeded);
+    }
+
     // Maintainable methods
     public void scheduleMaintenance(){
         this.maintenanceNeeded = this.needsMaintencance();
@@ -88,7 +94,7 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         setCurrentMileage(getCurrentMileage() + distance);
         this.fuellevel -= FuelNedded;
         this.updateTotalDistanceTraveled(distance);
-        System.out.println(distance + " km Driving on road");
+        System.out.println("Vehicle VID: "+this.getId() + ", Driving on road .." + distance + " km");
     }
 
     @Override

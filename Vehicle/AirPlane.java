@@ -22,6 +22,12 @@ public class AirPlane extends AirVehicle implements FuelConsumable, PassengerCar
         this.CurrentCargo = CurrentCargo;
     }
 
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.printf("Fuel Level: %.2f, Current Passengers: %d, Passenger Capacity: %d, Current Cargo: %.2f, Cargo Capacity: %d, Maintenance Needed: %b\n", fuellevel, Currentpassengers, PassengerCapacity, CurrentCargo, CargoCapacity, maintenanceNeeded);
+    }
+
     // Maintainable methods
     public void scheduleMaintenance(){
         this.maintenanceNeeded = this.needsMaintencance();
@@ -112,7 +118,7 @@ public class AirPlane extends AirVehicle implements FuelConsumable, PassengerCar
         setCurrentMileage(getCurrentMileage() + distance);
         this.fuellevel -= FuelNedded;
         this.updateTotalDistanceTraveled(distance);
-        System.out.println(distance + " km, Flying at .."+ getmaxAltitude());
+        System.out.println("Vehicle VID: "+this.getId() + ", Flying at .. " +this.getmaxAltitude() + " km");
     }
 
     @Override

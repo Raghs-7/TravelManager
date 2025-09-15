@@ -11,6 +11,12 @@ public abstract class WaterVehicle extends Vehicle {
     }
 
     @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.printf("Has Sail: %b, ", hasSail);
+    }
+
+    @Override
     public double estimateJourneyTime(double distance){
         double Max_Speed = getMaxSpeed();
         double result = distance/Max_Speed;

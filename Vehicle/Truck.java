@@ -19,6 +19,12 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
         this.CurrentCargo = CurrentCargo;
     }
 
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.printf("Fuel Level: %.2f, Current Cargo: %.2f, Cargo Capacity: %d, Maintenance Needed: %b\n", fuellevel, CurrentCargo, CargoCapacity, maintenanceNeeded);
+    }
+
     // Maintainable methods
     public void scheduleMaintenance(){
         this.maintenanceNeeded = this.needsMaintencance();
@@ -88,7 +94,7 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
         setCurrentMileage(getCurrentMileage() + distance);
         this.fuellevel -= FuelNedded;
         this.updateTotalDistanceTraveled(distance);
-        System.out.println(distance + " km, Hauling Cargo ..");
+        System.out.println("Vehicle VID: "+this.getId() + ", Hauling Cargo .. " +distance + " km");
     }
 
     @Override

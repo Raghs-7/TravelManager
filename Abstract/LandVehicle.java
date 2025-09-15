@@ -22,4 +22,10 @@ public abstract class LandVehicle extends Vehicle{
         return this.numWheels;
     }
 
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.printf("Number of Wheels: %d, ", numWheels);
+    }
+
 }

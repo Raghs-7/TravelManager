@@ -11,6 +11,12 @@ public abstract class AirVehicle extends Vehicle {
     }
 
     @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.printf("Max Altitude: %.2f, ", maxAltitude);
+    }
+
+    @Override
     public double estimateJourneyTime(double distance){
         double Max_Speed = getMaxSpeed();
         double result = distance/Max_Speed;

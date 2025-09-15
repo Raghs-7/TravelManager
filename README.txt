@@ -22,7 +22,7 @@ Instructions to Compile and Run --->
 
 1. Open the terminal and navigate to the project source directory.
 
-2. run javac Abstract/*.java Interface/*.java myException/*.java Vehicle/*.java *.java
+2. javac Abstract/*.java Interface/*.java myException/*.java Vehicle/*.java FleetManager/*.java *.java
 
 ---------------------------------------------------------------------------------------------------------
 

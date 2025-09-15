@@ -21,7 +21,7 @@ public class FleetManager {
         // }
         Present.add(v.getId());
         fleet.add(v);
-        System.out.println("Vehicle added Successfully");
+        System.out.printf("Vehicle  VID:%s added Successfully\n", v.getId());
     }
 
     public boolean IsPresent(String id){
@@ -181,10 +181,45 @@ public class FleetManager {
         return report.toString();
     }
 
+    public void generateIndividualReport(){
+        for (Vehicle v : fleet) {
+            if (v instanceof Car){
+                Car c = (Car) v;
+                System.out.println("Car");
+                c.displayInfo();
+            }
+            else if (v instanceof Truck){
+                Truck T = (Truck) v;
+                System.out.println("Truck");
+                T.displayInfo();
+            }
+            else if (v instanceof Bus){
+                Bus B = (Bus) v;
+                System.out.println("Bus");
+                B.displayInfo();
+            }
+            else if (v instanceof AirPlane){
+                AirPlane a = (AirPlane) v;
+                System.out.println("AirPlane");
+                a.displayInfo();
+            }
+            else if (v instanceof CargoShipFuel){
+                CargoShipFuel c = (CargoShipFuel) v;
+                System.out.println("CargoShip");
+                c.displayInfo();
+            }
+            else if (v instanceof CargoShipSail){
+                CargoShipSail c = (CargoShipSail) v;
+                System.out.println("CargoShip");
+                c.displayInfo();
+            }
+            System.out.println();
+        }
+    }
+
     public ArrayList<Vehicle> getVehicleNeedingMaintenance(){
         ArrayList<Vehicle> result = new ArrayList<>();
         for (Vehicle v : fleet) {
-            // String type = v.getClass().getSimpleName();
             if (v instanceof Car){
                 Car c = (Car) v;
                 if (c.needsMaintencance()==true) {
@@ -414,7 +449,6 @@ public void saveToFile(String filename) {
                             CargoShipSail ship = new CargoShipSail(id, model, maxSpeed, currentCargo);
                             this.addVehicle(ship);
                         }
-                        IsPresent(id);
                         break;
                     }
 
