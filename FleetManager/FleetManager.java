@@ -1,18 +1,20 @@
 package FleetManager;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 import Vehicle.*;
 import myException.InvalidOperationException;
 
 public class FleetManager {
-    private ArrayList<Vehicle> fleet= new ArrayList<>();
+    private TreeSet<Vehicle> fleet = new TreeSet<>();
     private HashSet<String> Present = new HashSet<>();
 
     public void addVehicle(Vehicle v){
@@ -29,25 +31,27 @@ public class FleetManager {
     }
 
     public void removeVehicle(String id) throws InvalidOperationException{
-        if (IsPresent(id)==false){
+        if (Present.contains(id)==false){
             throw new InvalidOperationException();
         }
         Present.remove(id);
-        for (int i=0; i<fleet.size(); i++){
-            Vehicle temp = fleet.get(i);
-            if (id.equals(temp.getId())){
-                fleet.remove(temp);
+        Iterator<Vehicle> it = fleet.iterator();
+        while (it.hasNext()) {
+            Vehicle temp = it.next();
+            if (id.equals(temp.getId())) {
+                it.remove(); // ✅ safe removal while iterating
             }
         }
     }
 
     public void startAllJourneys(double distance){
-        for (int i=0; i<fleet.size(); i++){
-            Vehicle temp = fleet.get(i);
+        Iterator<Vehicle> it = fleet.iterator();
+        while (it.hasNext()){
+            Vehicle temp = it.next();
             try{
                 temp.move(distance);
             }
-            catch (Exception e){
+            catch(Exception e){
                 System.out.printf("%s ID Vehicle don't have enough Fuel\n", temp.getId());
             }
         }
@@ -55,9 +59,9 @@ public class FleetManager {
 
     public double getTotalFuelConsumption(double distance){
         double result = 0;
-        for (int i=0; i<fleet.size(); i++){
-            
-            Vehicle v = fleet.get(i);
+        Iterator<Vehicle> it = fleet.iterator();
+        while(it.hasNext()){
+            Vehicle v = it.next();
             if (v instanceof Car){ 
                 Car c = (Car) v;
                 result += c.consumeFuel(distance);
@@ -83,8 +87,9 @@ public class FleetManager {
     }
 
     public void maintainAll(){
-        for (int i=0; i<fleet.size(); i++){
-            Vehicle v = fleet.get(i);
+        Iterator<Vehicle> it = fleet.iterator();
+        while(it.hasNext()){
+            Vehicle v = it.next();
             
             if (v instanceof Car){ 
                 Car c = (Car) v;
@@ -124,59 +129,65 @@ public class FleetManager {
     }
 
 
-    public void SortFleetByEfficiency(){
-        Collections.sort(fleet);
-    }
-
     public String generateReport(){
         StringBuilder report = new StringBuilder();
-        double avgEfficiency = 0;
-        double totalMileage = 0;
         int maintenanceCount = 0;
 
         int cars=0, trucks=0, buses=0, airplanes=0, cargoships=0;
 
+        Vehicle fastestVehicle = fleet.first();
+        Vehicle slowestVehicle = fleet.first(); 
+
         for (Vehicle v : fleet) {
-            avgEfficiency += v.calculateFuelEfficiency();
-            totalMileage += v.getCurrentMileage();
 
             if (v instanceof Car){ 
                 cars++;
                 Car c = (Car) v;
                 maintenanceCount += c.needsMaintencance() ? 1: 0;
+                if (fastestVehicle.getMaxSpeed() < c.getMaxSpeed()) fastestVehicle = c;
+                if (fastestVehicle.getMaxSpeed() > c.getMaxSpeed()) slowestVehicle = c;
             }
             else if (v instanceof Truck){ 
                 trucks++;
                 Truck t = (Truck) v;
                 maintenanceCount += t.needsMaintencance() ? 1: 0;
+                if (fastestVehicle.getMaxSpeed() < t.getMaxSpeed()) fastestVehicle = t;
+                if (fastestVehicle.getMaxSpeed() > t.getMaxSpeed()) slowestVehicle = t;
             }
             else if (v instanceof Bus){
                 buses++;
                 Bus b = (Bus) v;
                 maintenanceCount += b.needsMaintencance() ? 1: 0;  
+                if (fastestVehicle.getMaxSpeed() < b.getMaxSpeed())fastestVehicle = b;
+                if (fastestVehicle.getMaxSpeed() > b.getMaxSpeed()) slowestVehicle = b;
             }
             else if (v instanceof AirPlane){ 
                 airplanes++;
                 AirPlane a = (AirPlane) v;
                 maintenanceCount += a.needsMaintencance() ? 1: 0;  
+                if (fastestVehicle.getMaxSpeed() < a.getMaxSpeed())fastestVehicle = a;
+                if (fastestVehicle.getMaxSpeed() > a.getMaxSpeed()) slowestVehicle = a;
             }
             else if (v instanceof CargoShipFuel){
                 cargoships++;
                 CargoShipFuel c = (CargoShipFuel) v;
                 maintenanceCount += c.needsMaintencance() ? 1: 0;  
+                if (fastestVehicle.getMaxSpeed() < c.getMaxSpeed())fastestVehicle = c;
+                if (fastestVehicle.getMaxSpeed() > c.getMaxSpeed()) slowestVehicle = c;
             }
             else if (v instanceof CargoShipSail){
                 cargoships++;
                 CargoShipSail c = (CargoShipSail) v;
                 maintenanceCount += c.needsMaintencance() ? 1: 0;  
+                if (fastestVehicle.getMaxSpeed() < c.getMaxSpeed())fastestVehicle = c;
+                if (fastestVehicle.getMaxSpeed() > c.getMaxSpeed()) slowestVehicle = c;
             }
         }
-        avgEfficiency /= fleet.size();
         report.append(String.format("Total Vehicles: %d%n", fleet.size()));
         report.append(String.format("By Type -> Cars:%d Trucks:%d Buses:%d Planes:%d Ships:%d %n",cars,trucks,buses,airplanes,cargoships));
-        report.append(String.format("Average Fuel Efficiency   : %.2f km/l%n", avgEfficiency));
-        report.append(String.format("Total Mileage             : %.2f km%n", totalMileage));
         report.append(String.format("Vehicle Needs Maintenance : %d%n", maintenanceCount));
+        report.append(String.format("Fastest Vehicle: %d%n",fastestVehicle.getMaxSpeed()));
+        report.append(String.format("Slowest Vehicle: %d%n",slowestVehicle.getMaxSpeed()));
 
         return report.toString();
     }
@@ -285,163 +296,148 @@ public class FleetManager {
         }
     }
 
-public void saveToFile(String filename) {
-    try (FileWriter writer = new FileWriter(filename)) {
-        for (Vehicle v : fleet) {
-            String type = v.getClass().getSimpleName();
-            StringBuilder content = new StringBuilder();
+    public void saveToFile(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (Vehicle v : fleet) {
+                String type = v.getClass().getSimpleName();
+                StringBuilder content = new StringBuilder();
 
-            content.append(type).append(",");
+                content.append(type).append(",");
 
-            if (type.equals("Car")) {
-                Car c = (Car) v;
-                content.append(c.getId()).append(",");
-                content.append(c.getModel()).append(",");
-                content.append(c.getMaxSpeed()).append(",");
-                content.append(c.getCurrentMileage()).append(",");
-                content.append(c.getnumWheels()).append(",");
-                content.append(c.getfuelLevel()).append(",");
-                content.append(c.getPassengerCapacity()).append(",");
-                content.append(c.getCurrentpassengers()).append("\n");
-            } 
-            else if (type.equals("Truck")) {
-                Truck t = (Truck) v;
-                content.append(t.getId()).append(",");
-                content.append(t.getModel()).append(",");
-                content.append(t.getMaxSpeed()).append(",");
-                content.append(t.getCurrentMileage()).append(",");
-                content.append(t.getnumWheels()).append(",");
-                content.append(t.getfuelLevel()).append(",");
-                content.append(t.getCargoCapacity()).append(",");
-                content.append(t.getCurrentCargo()).append("\n");
-            } 
-            else if (type.equals("Bus")) {
-                Bus b = (Bus) v;
-                content.append(b.getId()).append(",");
-                content.append(b.getModel()).append(",");
-                content.append(b.getMaxSpeed()).append(",");
-                content.append(b.getCurrentMileage()).append(",");
-                content.append(b.getnumWheels()).append(",");
-                content.append(b.getfuelLevel()).append(",");
-                content.append(b.getPassengerCapacity()).append(",");
-                content.append(b.getCurrentpassengers()).append(",");
-                content.append(b.getCargoCapacity()).append(",");
-                content.append(b.getCurrentCargo()).append("\n");
-            } 
-            else if (type.equals("AirPlane")) {
-                AirPlane a = (AirPlane) v;
-                content.append(a.getId()).append(",");
-                content.append(a.getModel()).append(",");
-                content.append(a.getMaxSpeed()).append(",");
-                content.append(a.getCurrentMileage()).append(",");
-                content.append(a.getmaxAltitude()).append(",");
-                content.append(a.getfuelLevel()).append(",");
-                content.append(a.getPassengerCapacity()).append(",");
-                content.append(a.getCurrentpassengers()).append(",");
-                content.append(a.getCargoCapacity()).append(",");
-                content.append(a.getCurrentCargo()).append("\n");
-            } 
-            else if (type.equals("CargoShipSail")) {
-                CargoShipSail c = (CargoShipSail) v;
-                content.append(c.getId()).append(",");
-                content.append(c.getModel()).append(",");
-                content.append(c.getMaxSpeed()).append(",");
-                content.append(c.getCurrentMileage()).append(",");
-                content.append(c.gethasSail()).append(",");
-                content.append(c.getCargoCapacity()).append(",");
-                content.append(c.getCurrentCargo()).append("\n");
-            } 
-            else if (type.equals("CargoShipFuel")) {
-                CargoShipFuel c = (CargoShipFuel) v;
-                content.append(c.getId()).append(",");
-                content.append(c.getModel()).append(",");
-                content.append(c.getMaxSpeed()).append(",");
-                content.append(c.getCurrentMileage()).append(",");
-                content.append(c.gethasSail()).append(",");
-                content.append(c.getCargoCapacity()).append(",");
-                content.append(c.getCurrentCargo()).append("\n");
+                if (type.equals("Car")) {
+                    Car c = (Car) v;
+                    content.append(c.getId()).append(",");
+                    content.append(c.getModel()).append(",");
+                    content.append(c.getMaxSpeed()).append(",");
+                    content.append(c.getnumWheels()).append(",");
+                } 
+                else if (type.equals("Truck")) {
+                    Truck t = (Truck) v;
+                    content.append(t.getId()).append(",");
+                    content.append(t.getModel()).append(",");
+                    content.append(t.getMaxSpeed()).append(",");
+                    content.append(t.getnumWheels()).append(",");
+                } 
+                else if (type.equals("Bus")) {
+                    Bus b = (Bus) v;
+                    content.append(b.getId()).append(",");
+                    content.append(b.getModel()).append(",");
+                    content.append(b.getMaxSpeed()).append(",");
+                    content.append(b.getnumWheels()).append(",");
+                } 
+                else if (type.equals("AirPlane")) {
+                    AirPlane a = (AirPlane) v;
+                    content.append(a.getId()).append(",");
+                    content.append(a.getModel()).append(",");
+                    content.append(a.getMaxSpeed()).append(",");
+                    content.append(a.getmaxAltitude()).append(",");
+                } 
+                else if (type.equals("CargoShipSail")) {
+                    CargoShipSail c = (CargoShipSail) v;
+                    content.append(c.getId()).append(",");
+                    content.append(c.getModel()).append(",");
+                    content.append(c.getMaxSpeed()).append(",");
+                    content.append(c.gethasSail()).append(",");
+                } 
+                else if (type.equals("CargoShipFuel")) {
+                    CargoShipFuel c = (CargoShipFuel) v;
+                    content.append(c.getId()).append(",");
+                    content.append(c.getModel()).append(",");
+                    content.append(c.getMaxSpeed()).append(",");
+                    content.append(c.gethasSail()).append(",");
+                }
+
+                writer.write(content.toString());
             }
-
-            writer.write(content.toString());
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
         }
-    } catch (IOException e) {
-        System.out.println("Error writing file: " + e.getMessage());
     }
-}
 
 
-    public void loadFromFile(String filename) {
+    public void loadFromFile(String filename) throws FileNotFoundException {
+        int idx = 1;
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line = br.readLine();
 
             while (line != null) {
                 String[] parts = line.split(",");
+                if (parts.length < 5) {
+                    line = br.readLine(); idx++;
+                    continue; 
+                }
                 String type = parts[0].trim();
+                String id = parts[1].trim();
+                String model = parts[2].trim();
+                double maxSpeed;
+                int specialQuantity;
+                try {
+                    maxSpeed = Double.parseDouble(parts[3].trim());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number format in line No. " + idx );
+                    line = br.readLine(); idx++;
+                    continue; 
+                }
+
+                try {
+                    specialQuantity = Integer.parseInt(parts[4].trim());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number format in line No. " + idx );
+                    line = br.readLine(); idx++;
+                    continue; 
+                }
+                
+                if (type.isEmpty() || id.isEmpty() || model.isEmpty() ) {
+                    System.out.println("Invalid data in line No. " + idx );
+                    line = br.readLine(); idx++;
+                    continue; 
+                }
+
 
                 switch (type) {
                     case "Car": {
-                        String id = parts[1].trim();
-                        String model = parts[2].trim();
-                        double maxSpeed = Double.parseDouble(parts[3].trim());
-                        int numWheels = Integer.parseInt(parts[4].trim());
-                        double fuelLevel = Double.parseDouble(parts[5].trim());
-                        int passengerCapacity = Integer.parseInt(parts[6].trim());
-                        int currentPassengers = Integer.parseInt(parts[7].trim());
-
+                        int numWheels = specialQuantity;
+                        double fuelLevel = 0;
+                        int passengerCapacity = 4;
+                        int currentPassengers = 0;
                         Car car = new Car(id, model, maxSpeed, numWheels, fuelLevel, passengerCapacity, currentPassengers);
                         this.addVehicle(car);
                         break;
                     }
 
                     case "Truck": {
-                        String id = parts[1].trim();
-                        String model = parts[2].trim();
-                        double maxSpeed = Double.parseDouble(parts[3].trim());
-                        int numWheels = Integer.parseInt(parts[4].trim());
-                        double fuelLevel = Double.parseDouble(parts[5].trim());
-                        double currentCargo = Double.parseDouble(parts[6].trim());
-
+                        int numWheels = specialQuantity;
+                        double fuelLevel = 0;
+                        double currentCargo = 0;
                         Truck truck = new Truck(id, model, maxSpeed, numWheels, fuelLevel, currentCargo);
                         this.addVehicle(truck);
                         break;
                     }
 
                     case "Bus": {
-                        String id = parts[1].trim();
-                        String model = parts[2].trim();
-                        double maxSpeed = Double.parseDouble(parts[3].trim());
-                        int numWheels = Integer.parseInt(parts[4].trim());
-                        double fuelLevel = Double.parseDouble(parts[5].trim());
-                        int currentPassengers = Integer.parseInt(parts[6].trim());
-                        double currentCargo = Double.parseDouble(parts[7].trim());
-
+                        int numWheels = specialQuantity;
+                        double fuelLevel = 0;
+                        int currentPassengers = 0;
+                        double currentCargo = 0;
                         Bus bus = new Bus(id, model, maxSpeed, numWheels, fuelLevel, currentPassengers, currentCargo);
                         this.addVehicle(bus);
                         break;
                     }
 
                     case "AirPlane": {
-                        String id = parts[1].trim();
-                        String model = parts[2].trim();
-                        double maxSpeed = Double.parseDouble(parts[3].trim());
-                        int maxAltitude = Integer.parseInt(parts[4].trim());
-                        double fuelLevel = Double.parseDouble(parts[5].trim());
-                        int currentPassengers = Integer.parseInt(parts[6].trim());
-                        double currentCargo = Double.parseDouble(parts[7].trim());
-
+                        int maxAltitude = specialQuantity;
+                        double fuelLevel = 0;
+                        int currentPassengers = 0;
+                        double currentCargo = 0;
                         AirPlane airplane = new AirPlane(id, model, maxSpeed, maxAltitude, fuelLevel, currentPassengers, currentCargo);
                         this.addVehicle(airplane);
                         break;
                     }
 
                     case "CargoShip": {
-                        String id = parts[1].trim();
-                        String model = parts[2].trim();
-                        double maxSpeed = Double.parseDouble(parts[3].trim());
-                        boolean hasSail = Boolean.parseBoolean(parts[4].trim());
-                        double currentCargo = Double.parseDouble(parts[5].trim());
-                        double fuelLevel = Double.parseDouble(parts[6].trim());
-
+                        boolean hasSail = specialQuantity >= 1 ? true : false;
+                        double currentCargo = 0;
+                        double fuelLevel = 0;
                         if (hasSail==false){
                             CargoShipFuel ship = new CargoShipFuel(id, model, maxSpeed, currentCargo, fuelLevel);
                             this.addVehicle(ship);                   
@@ -454,13 +450,13 @@ public void saveToFile(String filename) {
 
                     default: 
                 }
-
-                line = br.readLine();
+                System.out.println("Loaded vehicle from line No. " + idx );
+                line = br.readLine(); idx++;
             }
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
+            throw new FileNotFoundException();
         }
     }
-
 
 }

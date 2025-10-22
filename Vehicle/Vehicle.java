@@ -54,9 +54,14 @@ public abstract class Vehicle implements Comparable<Vehicle>{
     }
 
     @Override
-    public int compareTo(Vehicle other) {
-        // Higher efficiency comes later in sort order
-        return Double.compare(this.calculateFuelEfficiency(),other.calculateFuelEfficiency());
-    }
 
+    public int compareTo(Vehicle other) {
+    // First compare by fuel efficiency
+    if (this.calculateFuelEfficiency() == other.calculateFuelEfficiency()) {
+        // If same, compare by Vehicle ID (VID)
+        return this.id.compareTo(other.id);
+    }
+    return Double.compare(this.calculateFuelEfficiency(), other.calculateFuelEfficiency());
+    
+    }
 }
