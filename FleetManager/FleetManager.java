@@ -130,6 +130,10 @@ public class FleetManager {
 
 
     public String generateReport(){
+        if (fleet.isEmpty()) {
+            return "No vehicles in the fleet. Please add some before generating a report.";
+        }
+
         StringBuilder report = new StringBuilder();
         int maintenanceCount = 0;
 
@@ -186,8 +190,8 @@ public class FleetManager {
         report.append(String.format("Total Vehicles: %d%n", fleet.size()));
         report.append(String.format("By Type -> Cars:%d Trucks:%d Buses:%d Planes:%d Ships:%d %n",cars,trucks,buses,airplanes,cargoships));
         report.append(String.format("Vehicle Needs Maintenance : %d%n", maintenanceCount));
-        report.append(String.format("Fastest Vehicle: %d%n",fastestVehicle.getMaxSpeed()));
-        report.append(String.format("Slowest Vehicle: %d%n",slowestVehicle.getMaxSpeed()));
+        report.append(String.format("Fastest Vehicle: %.2f%n", fastestVehicle.getMaxSpeed()));
+        report.append(String.format("Slowest Vehicle: %.2f%n", slowestVehicle.getMaxSpeed()));
 
         return report.toString();
     }
@@ -309,42 +313,42 @@ public class FleetManager {
                     content.append(c.getId()).append(",");
                     content.append(c.getModel()).append(",");
                     content.append(c.getMaxSpeed()).append(",");
-                    content.append(c.getnumWheels()).append(",");
+                    content.append(c.getnumWheels()).append("\n");
                 } 
                 else if (type.equals("Truck")) {
                     Truck t = (Truck) v;
                     content.append(t.getId()).append(",");
                     content.append(t.getModel()).append(",");
                     content.append(t.getMaxSpeed()).append(",");
-                    content.append(t.getnumWheels()).append(",");
+                    content.append(t.getnumWheels()).append("\n");
                 } 
                 else if (type.equals("Bus")) {
                     Bus b = (Bus) v;
                     content.append(b.getId()).append(",");
                     content.append(b.getModel()).append(",");
                     content.append(b.getMaxSpeed()).append(",");
-                    content.append(b.getnumWheels()).append(",");
+                    content.append(b.getnumWheels()).append("\n");
                 } 
                 else if (type.equals("AirPlane")) {
                     AirPlane a = (AirPlane) v;
                     content.append(a.getId()).append(",");
                     content.append(a.getModel()).append(",");
                     content.append(a.getMaxSpeed()).append(",");
-                    content.append(a.getmaxAltitude()).append(",");
+                    content.append(a.getmaxAltitude()).append("\n");
                 } 
                 else if (type.equals("CargoShipSail")) {
                     CargoShipSail c = (CargoShipSail) v;
                     content.append(c.getId()).append(",");
                     content.append(c.getModel()).append(",");
                     content.append(c.getMaxSpeed()).append(",");
-                    content.append(c.gethasSail()).append(",");
+                    content.append(c.gethasSail()).append("\n");
                 } 
                 else if (type.equals("CargoShipFuel")) {
                     CargoShipFuel c = (CargoShipFuel) v;
                     content.append(c.getId()).append(",");
                     content.append(c.getModel()).append(",");
                     content.append(c.getMaxSpeed()).append(",");
-                    content.append(c.gethasSail()).append(",");
+                    content.append(c.gethasSail()).append("\n");
                 }
 
                 writer.write(content.toString());

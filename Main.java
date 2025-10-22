@@ -23,29 +23,29 @@ public class Main {
    }
 
    private static void option1(FleetManager fleetManager, Scanner sc) {
-      System.out.println("What type of Vehicle You want to add ?");
-      System.out.println("1. Car");
-      System.out.println("2. Truck");
-      System.out.println("3. Bus");
-      System.out.println("4. AirPlane");
-      System.out.println("5. CargoShip");
       int type;
       while(true){
          try{
+            System.out.println("What type of Vehicle You want to add ?");
+            System.out.println("1. Car");
+            System.out.println("2. Truck");
+            System.out.println("3. Bus");
+            System.out.println("4. AirPlane");
+            System.out.println("5. CargoShip");
             type = sc.nextInt();
+            if (type>5) throw new Exception();
             break;
          }
          catch (Exception e){
             System.out.println("Invalid type");
-            sc.next(); // clear the invalid input
-            System.out.println("Try Again: ");
+            sc.nextLine();
          }
       }
 
-      System.out.println("Enter ID:");
       String id;
       while (true){
          try{
+            System.out.println("Enter ID:");
             id = sc.next();
             if (fleetManager.IsPresent(id)){
                System.out.println("Another entry of " + id + " is present");
@@ -55,47 +55,36 @@ public class Main {
          }
          catch (Exception e){
             System.out.println("Invalid ID");
-            sc.next(); // clear the invalid input
          }
       }
 
       System.out.println("Enter Model: ");
-      String model;
-      while (true){
-         try{
-            model = sc.next();
-            break;
-         }
-         catch (Exception e){
-            System.out.println("Invalid Model");
-            sc.next(); // clear the invalid input
-         }
-      }
+      String model = sc.next();
 
-      System.out.println("Enter Max Speed (km/h): ");
       double maxSpeed;
       while (true){
          try{
+            System.out.println("Enter Max Speed (km/h): ");
             maxSpeed = sc.nextDouble();
             break;
          }
          catch (Exception e){
             System.out.println("Invalid Max Speed");
-            sc.next(); // clear the invalid input
+            sc.nextLine();
          }
       }
 
       if (type == 1) { // Car
-         System.out.println("Number of Wheels: ");
          int num;
          while(true){
             try{
+               System.out.println("Number of Wheels: ");
                num = sc.nextInt();
                break;
             }
             catch (Exception e){
                System.out.println("Invalid Number of Wheels");
-               return;
+               sc.nextLine();
             }
          }
          
@@ -103,42 +92,42 @@ public class Main {
          fleetManager.addVehicle(car);
 
       } else if (type == 2) { // Truck
-         System.out.println("Number of Wheels: ");
          int num;
          while(true){
             try{
+               System.out.println("Number of Wheels: ");
                num = sc.nextInt();
                break;
             }
             catch (Exception e){
                System.out.println("Invalid Number of Wheels");
-               return;
+               sc.nextLine();
             }
          }
          Truck truck = new Truck(id, model, maxSpeed, num, 0.0, 0.0);
          fleetManager.addVehicle(truck);
 
       } else if (type == 3) { // Bus
-         System.out.println("Number of Wheels: ");
          int num;
          while(true){
             try{
+               System.out.println("Number of Wheels: ");
                num = sc.nextInt();
                break;
             }
             catch (Exception e){
                System.out.println("Invalid Number of Wheels");
-               return;
+               sc.nextLine();
             }
          }
          Bus bus = new Bus(id, model, maxSpeed, num, 0.0, 0, 0.0);
          fleetManager.addVehicle(bus);
 
       } else if (type == 4) { // AirPlane
-         System.out.println("Max altitude:");
          int maxAltitude;
          while(true){
             try{
+               System.out.println("Max altitude:");
                maxAltitude = sc.nextInt();
                if (maxAltitude <= 0){
                   System.out.println("Max Altitude should be positive");
@@ -148,7 +137,7 @@ public class Main {
             }
             catch (Exception e){
                System.out.println("Invalid maxAltitude");
-               return;
+               sc.nextLine();
             }
          }
          AirPlane airplane = new AirPlane(id, model, maxSpeed, maxAltitude, 0.0, 0, 0.0);
@@ -180,7 +169,7 @@ public class Main {
          }
          catch (Exception e){
             System.out.println("Invalid ID");
-            sc.next(); // clear the invalid input
+            sc.nextLine();
          }
       }
       
@@ -193,10 +182,10 @@ public class Main {
    }
    
    private static void option3(FleetManager fleetManager, Scanner sc) {
-      System.out.println("Enter the distance of the journey :");
       double distance;
       while (true){
          try{
+            System.out.println("Enter the distance of the journey :");
             distance = sc.nextDouble();
             if (distance <= 0){
                System.out.println("Distance should be positive");
@@ -206,7 +195,7 @@ public class Main {
          }
          catch (Exception e){
             System.out.println("Invalid Distance");
-            sc.next(); // clear the invalid input
+            sc.nextLine();
          }
       }
       fleetManager.startAllJourneys(distance);
@@ -223,7 +212,7 @@ public class Main {
             break;
          } catch (Exception e) {
             System.out.println("Invalid amount of fuel");
-            sc.next(); // clear the invalid input
+            sc.nextLine();
          }
       }
    }
@@ -233,7 +222,7 @@ public class Main {
       System.out.println("Successfully performed Maintenance ");
    }
 
-   private static void option6(FleetManager fleetManager, Scanner sc) {
+   private static void option6(FleetManager fleetManager) {
       System.out.println(fleetManager.generateReport());
       System.out.println();
       fleetManager.generateIndividualReport();
@@ -255,7 +244,6 @@ public class Main {
       }
       catch (Exception e){
          System.out.println("File not found");
-         sc.next(); // clear the invalid input
       }
       
    }
@@ -333,7 +321,7 @@ public class Main {
          } else if (option == 5) {
             option5(fleetManager, sc);
          } else if (option == 6) {
-            option6(fleetManager, sc);
+            option6(fleetManager);
          } else if (option == 7) {
             option7(fleetManager, sc);
          } else if (option == 8) {

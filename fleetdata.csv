@@ -1,0 +1,15 @@
+Car,C001,HondaCivic,180,4
+Truck,T001,VolvoFH,120,6
+Bus,B001,TataBus,100,8
+AirPlane,A001,Boeing747,900,10000
+CargoShip,CS001,OceanKing,80,true      
+CargoShip,CF001,SeaCarrier,70,false   
+Car,C002,,160,4                    
+Truck,,Scania,130,6                 
+Bus,B002,TataUltra,notANumber,6     
+AirPlane,A002,AirbusA320,850,wrong 
+CargoShip,CS002,AtlanticQueen,90,   
+Bike,BK001,Speedster,140,2          
+Car,C003,FordFocus, ,4
+Truck,T002,MANTruck,110,            
+Car,C004,ToyotaCorolla,175,4
