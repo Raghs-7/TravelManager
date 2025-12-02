@@ -1,0 +1,373 @@
+===============================================================================
+                    FLEET SIMULATOR - QUICK REFERENCE
+                         Assignment 3 - AP-M2025
+===============================================================================
+
+WHAT YOU NEED TO DO:
+====================
+
+1. ORGANIZE YOUR FILES
+   ├── Copy your existing project files from Assignments 1 & 2
+   ├── Create new folders: Simulation/ and GUI/
+   ├── Add the 3 new Java files I provided
+   └── Add README.md
+
+2. COMPILE
+   - Run: javac Abstract/*.java Interface/*.java myException/*.java Vehicle/*.java FleetManager/*.java Simulation/*.java GUI/*.java
+   - Or use the compile_and_run script
+
+3. TEST
+   - Run: java GUI.FleetSimulatorGUI
+   - Test all buttons
+   - Observe race condition (sync OFF)
+   - Fix race condition (sync ON)
+
+4. CAPTURE SCREENSHOTS (4-5 Required)
+   ✓ race_condition_before.png - Show discrepancy when sync OFF
+   ✓ race_condition_after.png - Show correct behavior when sync ON
+   ✓ vehicle_refuel.png - Show refuel dialog with custom amount input
+   ✓ individual_control.png - Show vehicles in different states (running/paused/stopped)
+   ✓ global_pause_resume.png - (Optional) Show all vehicles paused
+
+5. PACKAGE & SUBMIT
+   - Create ZIP with: src/, screenshots/, README.md
+   - Verify everything compiles
+   - Submit before deadline
+
+
+===============================================================================
+NEW FILES YOU NEED TO ADD (3 FILES)
+===============================================================================
+
+📁 src/Simulation/VehicleThread.java
+   - Each vehicle runs as a thread
+   - Updates every 1 second (1 km traveled)
+   - Manages fuel consumption
+   - Updates shared highway counter
+
+📁 src/Simulation/HighwaySimulator.java
+   - Manages shared counter: highwayDistance
+   - Has UNSAFE method (causes race condition)
+   - Has SAFE methods (synchronized & ReentrantLock)
+   - Toggle between modes
+
+📁 src/GUI/FleetSimulatorGUI.java
+   - Complete Swing GUI
+   - Control buttons (Start, Pause, Resume, Stop, Sync, Reset)
+   - Real-time vehicle panels with INDIVIDUAL controls
+   - Statistics display with race condition detection
+   - Custom refuel dialog with input validation
+
+
+===============================================================================
+FOLDER STRUCTURE
+===============================================================================
+
+FleetSimulator/
+│
+├── src/
+│   ├── Abstract/           [YOUR EXISTING FILES]
+│   │   ├── AirVehicle.java
+│   │   ├── LandVehicle.java
+│   │   └── WaterVehicle.java
+│   │
+│   ├── Interface/          [YOUR EXISTING FILES]
+│   │   ├── CargoCarrier.java
+│   │   ├── FuelConsumable.java
+│   │   ├── Maintainable.java
+│   │   └── PassengerCarrier.java
+│   │
+│   ├── Vehicle/            [YOUR EXISTING FILES]
+│   │   ├── Vehicle.java
+│   │   ├── Car.java
+│   │   ├── Truck.java
+│   │   ├── Bus.java
+│   │   ├── AirPlane.java
+│   │   ├── CargoShipFuel.java
+│   │   └── CargoShipSail.java
+│   │
+│   ├── myException/        [YOUR EXISTING FILES]
+│   │   ├── InsufficientFuelException.java
+│   │   ├── InvalidOperationException.java
+│   │   └── OverloadException.java
+│   │
+│   ├── FleetManager/       [YOUR EXISTING FILES]
+│   │   └── FleetManager.java
+│   │
+│   ├── Simulation/         [NEW - ADD THESE]
+│   │   ├── VehicleThread.java          ⬅️ NEW FILE
+│   │   └── HighwaySimulator.java       ⬅️ NEW FILE
+│   │
+│   ├── GUI/                [NEW - ADD THIS]
+│   │   └── FleetSimulatorGUI.java      ⬅️ NEW FILE
+│   │
+│   └── Main.java           [YOUR EXISTING FILE]
+│
+├── screenshots/            [CREATE & ADD YOUR SCREENSHOTS]
+│   ├── race_condition_before.png       ⬅️ CAPTURE THIS
+│   ├── race_condition_after.png        ⬅️ CAPTURE THIS
+│   ├── vehicle_refuel.png              ⬅️ CAPTURE THIS (show dialog)
+│   ├── individual_control.png          ⬅️ CAPTURE THIS (show mixed states)
+│   └── global_pause_resume.png         ⬅️ OPTIONAL
+│
+├── README.md               [PROVIDED]
+├── compile_and_run.bat     [PROVIDED - for Windows]
+└── compile_and_run.sh      [PROVIDED - for Linux/Mac]
+
+
+===============================================================================
+HOW TO DEMONSTRATE RACE CONDITION
+===============================================================================
+
+STEP 1: Show the Problem (Synchronization OFF)
+-----------------------------------------------
+1. Launch GUI: java GUI.FleetSimulatorGUI
+2. Check status shows: "Synchronization: DISABLED"
+3. Click "Start Simulation"
+4. Wait 30-60 seconds
+5. Observe:
+   ✗ Shared Highway Distance: 453 km  (RED)
+   ✗ Total Individual Mileage: 500 km (RED)
+   ✗ Discrepancy: 47 km LOST!
+6. SCREENSHOT: race_condition_before.png
+
+EXPLANATION: Multiple threads updating shared counter without locks causes
+lost updates. Some increments overwrite others.
+
+
+STEP 2: Show the Solution (Synchronization ON)
+-----------------------------------------------
+1. Click "Enable Synchronization" button
+2. Button turns GREEN
+3. Status shows: "Synchronization: ENABLED"
+4. Continue watching counters
+5. Observe:
+   ✓ Shared Highway Distance: 500 km  (GREEN)
+   ✓ Total Individual Mileage: 500 km (BLUE)
+   ✓ Discrepancy: 0 km - Perfect match!
+6. SCREENSHOT: race_condition_after.png
+
+EXPLANATION: synchronized keyword ensures only one thread updates counter
+at a time. All increments are preserved.
+
+
+===============================================================================
+GUI CONTROLS REFERENCE
+===============================================================================
+
+🟢 Start Simulation
+   - Starts all vehicle threads
+   - Begins 1 km/second movement for each vehicle
+   - Enables Pause/Resume/Stop buttons
+
+🟡 Pause All
+   - Pauses all vehicles (threads still alive)
+   - Vehicles show "Paused" status
+   - Yellow background color
+
+🔵 Resume All
+   - Resumes all paused vehicles
+   - Vehicles show "Running" status
+   - Green background color
+
+🔴 Stop Simulation
+   - Stops all threads permanently
+   - Cannot be restarted (must reset)
+   - Vehicles show "Stopped" status
+
+🔄 Enable/Disable Synchronization
+   - OFF (RED): Race condition active, lost updates occur
+   - ON (GREEN): Race condition fixed, all updates preserved
+
+🔄 Reset Simulation
+   - Stops all threads
+   - Clears all counters
+   - Creates new vehicles
+   - Ready to start fresh
+
+⛽ Refuel
+   - Opens dialog to enter custom fuel amount
+   - Supports decimal values (e.g., 125.5 liters)
+   - Validates input (positive, max 500L)
+   - Shows error for invalid input
+   - Confirms successful refuel
+   - Auto-resumes if vehicle was out-of-fuel
+
+⏸ Pause (Individual)
+   - Pauses only THIS vehicle
+   - Other vehicles continue running
+   - Button becomes disabled when paused
+   - Resume button becomes enabled
+
+▶ Resume (Individual)
+   - Resumes only THIS vehicle
+   - Only works if vehicle is paused
+   - Button becomes disabled when running
+   - Pause button becomes enabled
+
+⏹ Stop (Individual)
+   - Permanently stops only THIS vehicle
+   - Cannot be restarted (must reset simulation)
+   - Disables all control buttons for this vehicle
+   - Other vehicles unaffected
+
+
+===============================================================================
+STATISTICS PANEL MEANING
+===============================================================================
+
+Shared Highway Distance
+   - Sum from shared counter (all threads increment this)
+   - RED when discrepancy detected (race condition)
+   - GREEN when correct
+
+Total Individual Mileage
+   - Sum of each vehicle's individual mileage
+   - Always accurate (no shared access)
+   - RED when discrepancy detected
+   - BLUE when correct
+
+Synchronization Status
+   - DISABLED (RED): Race condition is active
+   - ENABLED (GREEN): Race condition is fixed
+
+
+===============================================================================
+VEHICLE STATUS MEANINGS
+===============================================================================
+
+Ready      - Vehicle created, not started yet
+Running    - Vehicle actively traveling (green background)
+Paused     - Vehicle paused by user (yellow background)
+Out-of-Fuel - Vehicle stopped due to no fuel (red background)
+Stopped    - Vehicle permanently stopped (gray background)
+
+
+===============================================================================
+COMPILATION COMMANDS
+===============================================================================
+
+Windows:
+--------
+cd FleetSimulator\src
+javac Abstract\*.java Interface\*.java myException\*.java Vehicle\*.java FleetManager\*.java Simulation\*.java GUI\*.java
+java GUI.FleetSimulatorGUI
+
+Linux/Mac:
+----------
+cd FleetSimulator/src
+javac Abstract/*.java Interface/*.java myException/*.java Vehicle/*.java FleetManager/*.java Simulation/*.java GUI/*.java
+java GUI.FleetSimulatorGUI
+
+Or simply:
+----------
+Double-click compile_and_run.bat (Windows)
+Run ./compile_and_run.sh (Linux/Mac)
+
+
+===============================================================================
+TROUBLESHOOTING
+===============================================================================
+
+Problem: Compilation errors
+Solution: Ensure all packages match directory structure
+         Check package declarations in each file
+
+Problem: GUI doesn't launch
+Solution: Verify Java version (need JDK 8+)
+         Run from correct directory (src/)
+         Check CLASSPATH
+
+Problem: Race condition not visible
+Solution: Let simulation run longer (30-60 seconds)
+         Ensure synchronization is DISABLED
+         More vehicles = more visible race condition
+
+Problem: Vehicles don't move
+Solution: Click "Start Simulation" button
+         Check fuel levels (refuel if needed)
+         Verify not in paused state
+
+
+===============================================================================
+EVALUATION CHECKLIST
+===============================================================================
+
+Before submitting, verify:
+
+Multithreading (30 points):
+✓ At least 5 vehicles running in separate threads
+✓ Each updates every ~1 second
+✓ GUI controls all operations (Start/Pause/Resume/Stop)
+✓ Real-time display updates
+
+Race Condition (25 points):
+✓ Visible discrepancy when synchronization OFF
+✓ Screenshot showing lost updates (before)
+✓ Synchronization fix implemented (synchronized or ReentrantLock)
+✓ Screenshot showing correct behavior (after)
+✓ Explanation in README
+
+Integration (10 points):
+✓ Reuses Assignment 1/2 class hierarchy
+✓ All vehicle types functional
+✓ Interfaces implemented correctly
+
+Documentation (10 points):
+✓ README.md complete with all sections
+✓ Compilation instructions clear
+✓ Race condition explained
+✓ Screenshots included (4 total)
+
+
+===============================================================================
+IMPORTANT REMINDERS
+===============================================================================
+
+⚠️  DO NOT modify your existing Assignment 1/2 files
+⚠️  DO add the 3 new files in correct packages
+⚠️  DO capture all 4 required screenshots
+⚠️  DO test compilation on clean system before submitting
+⚠️  DO verify race condition is visible and fixable
+⚠️  DO include README.md with full explanations
+⚠️  DO submit before deadline: Nov 30, 2025 (23:59hrs)
+
+
+===============================================================================
+FILE CHECKLIST FOR SUBMISSION
+===============================================================================
+
+Required in ZIP file:
+□ src/Abstract/*.java (existing)
+□ src/Interface/*.java (existing)
+□ src/Vehicle/*.java (existing)
+□ src/myException/*.java (existing)
+□ src/FleetManager/*.java (existing)
+□ src/Simulation/VehicleThread.java (NEW)
+□ src/Simulation/HighwaySimulator.java (NEW)
+□ src/GUI/FleetSimulatorGUI.java (NEW)
+□ src/Main.java (existing)
+□ screenshots/race_condition_before.png
+□ screenshots/race_condition_after.png
+□ screenshots/vehicle_refuel.png
+□ screenshots/pause_resume.png
+□ README.md
+□ compile_and_run.bat (optional)
+□ compile_and_run.sh (optional)
+
+
+===============================================================================
+CONTACT FOR HELP
+===============================================================================
+
+If you encounter issues:
+1. Re-read this QUICK_REFERENCE
+2. Check README.md for detailed explanations
+3. Review IMPLEMENTATION_SUMMARY.md
+4. Verify file structure matches exactly
+5. Test on a clean Java installation
+
+
+===============================================================================
+GOOD LUCK WITH YOUR SUBMISSION!
+===============================================================================
