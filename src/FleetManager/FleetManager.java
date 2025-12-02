@@ -62,11 +62,11 @@ public class FleetManager {
         Iterator<Vehicle> it = fleet.iterator();
         while(it.hasNext()){
             Vehicle v = it.next();
-            if (v instanceof Car){ 
+            if (v instanceof Car){
                 Car c = (Car) v;
                 result += c.consumeFuel(distance);
             }
-            else if (v instanceof Truck){ 
+            else if (v instanceof Truck){
                 Truck t = (Truck) v;
                 result += t.consumeFuel(distance);
             }
@@ -74,13 +74,13 @@ public class FleetManager {
                 Bus b = (Bus) v;
                 result += b.consumeFuel(distance);
             }
-            else if (v instanceof AirPlane){ 
+            else if (v instanceof AirPlane){
                 AirPlane a = (AirPlane) v;
                 result += a.consumeFuel(distance);
             }
             else if (v instanceof CargoShipFuel){
                 CargoShipFuel c = (CargoShipFuel) v;
-                result += c.consumeFuel(distance); 
+                result += c.consumeFuel(distance);
             }
         }
         return result;
@@ -90,12 +90,12 @@ public class FleetManager {
         Iterator<Vehicle> it = fleet.iterator();
         while(it.hasNext()){
             Vehicle v = it.next();
-            
-            if (v instanceof Car){ 
+
+            if (v instanceof Car){
                 Car c = (Car) v;
                 c.performMaintenance();
             }
-            else if (v instanceof Truck){ 
+            else if (v instanceof Truck){
                 Truck t = (Truck) v;
                 t.performMaintenance();
             }
@@ -103,17 +103,17 @@ public class FleetManager {
                 Bus b = (Bus) v;
                 b.performMaintenance();
             }
-            else if (v instanceof AirPlane){ 
+            else if (v instanceof AirPlane){
                 AirPlane a = (AirPlane) v;
                 a.performMaintenance();
             }
             else if (v instanceof CargoShipFuel){
                 CargoShipFuel c = (CargoShipFuel) v;
-                c.performMaintenance(); 
+                c.performMaintenance();
             }
             else if (v instanceof CargoShipSail){
                 CargoShipSail c = (CargoShipSail) v;
-                c.performMaintenance(); 
+                c.performMaintenance();
             }
         }
     }
@@ -140,18 +140,18 @@ public class FleetManager {
         int cars=0, trucks=0, buses=0, airplanes=0, cargoships=0;
 
         Vehicle fastestVehicle = fleet.first();
-        Vehicle slowestVehicle = fleet.first(); 
+        Vehicle slowestVehicle = fleet.first();
 
         for (Vehicle v : fleet) {
 
-            if (v instanceof Car){ 
+            if (v instanceof Car){
                 cars++;
                 Car c = (Car) v;
                 maintenanceCount += c.needsMaintencance() ? 1: 0;
                 if (fastestVehicle.getMaxSpeed() < c.getMaxSpeed()) fastestVehicle = c;
                 if (fastestVehicle.getMaxSpeed() > c.getMaxSpeed()) slowestVehicle = c;
             }
-            else if (v instanceof Truck){ 
+            else if (v instanceof Truck){
                 trucks++;
                 Truck t = (Truck) v;
                 maintenanceCount += t.needsMaintencance() ? 1: 0;
@@ -161,28 +161,28 @@ public class FleetManager {
             else if (v instanceof Bus){
                 buses++;
                 Bus b = (Bus) v;
-                maintenanceCount += b.needsMaintencance() ? 1: 0;  
+                maintenanceCount += b.needsMaintencance() ? 1: 0;
                 if (fastestVehicle.getMaxSpeed() < b.getMaxSpeed())fastestVehicle = b;
                 if (fastestVehicle.getMaxSpeed() > b.getMaxSpeed()) slowestVehicle = b;
             }
-            else if (v instanceof AirPlane){ 
+            else if (v instanceof AirPlane){
                 airplanes++;
                 AirPlane a = (AirPlane) v;
-                maintenanceCount += a.needsMaintencance() ? 1: 0;  
+                maintenanceCount += a.needsMaintencance() ? 1: 0;
                 if (fastestVehicle.getMaxSpeed() < a.getMaxSpeed())fastestVehicle = a;
                 if (fastestVehicle.getMaxSpeed() > a.getMaxSpeed()) slowestVehicle = a;
             }
             else if (v instanceof CargoShipFuel){
                 cargoships++;
                 CargoShipFuel c = (CargoShipFuel) v;
-                maintenanceCount += c.needsMaintencance() ? 1: 0;  
+                maintenanceCount += c.needsMaintencance() ? 1: 0;
                 if (fastestVehicle.getMaxSpeed() < c.getMaxSpeed())fastestVehicle = c;
                 if (fastestVehicle.getMaxSpeed() > c.getMaxSpeed()) slowestVehicle = c;
             }
             else if (v instanceof CargoShipSail){
                 cargoships++;
                 CargoShipSail c = (CargoShipSail) v;
-                maintenanceCount += c.needsMaintencance() ? 1: 0;  
+                maintenanceCount += c.needsMaintencance() ? 1: 0;
                 if (fastestVehicle.getMaxSpeed() < c.getMaxSpeed())fastestVehicle = c;
                 if (fastestVehicle.getMaxSpeed() > c.getMaxSpeed()) slowestVehicle = c;
             }
@@ -314,35 +314,35 @@ public class FleetManager {
                     content.append(c.getModel()).append(",");
                     content.append(c.getMaxSpeed()).append(",");
                     content.append(c.getnumWheels()).append("\n");
-                } 
+                }
                 else if (type.equals("Truck")) {
                     Truck t = (Truck) v;
                     content.append(t.getId()).append(",");
                     content.append(t.getModel()).append(",");
                     content.append(t.getMaxSpeed()).append(",");
                     content.append(t.getnumWheels()).append("\n");
-                } 
+                }
                 else if (type.equals("Bus")) {
                     Bus b = (Bus) v;
                     content.append(b.getId()).append(",");
                     content.append(b.getModel()).append(",");
                     content.append(b.getMaxSpeed()).append(",");
                     content.append(b.getnumWheels()).append("\n");
-                } 
+                }
                 else if (type.equals("AirPlane")) {
                     AirPlane a = (AirPlane) v;
                     content.append(a.getId()).append(",");
                     content.append(a.getModel()).append(",");
                     content.append(a.getMaxSpeed()).append(",");
                     content.append(a.getmaxAltitude()).append("\n");
-                } 
+                }
                 else if (type.equals("CargoShipSail")) {
                     CargoShipSail c = (CargoShipSail) v;
                     content.append(c.getId()).append(",");
                     content.append(c.getModel()).append(",");
                     content.append(c.getMaxSpeed()).append(",");
                     content.append(c.gethasSail()).append("\n");
-                } 
+                }
                 else if (type.equals("CargoShipFuel")) {
                     CargoShipFuel c = (CargoShipFuel) v;
                     content.append(c.getId()).append(",");
@@ -368,7 +368,7 @@ public class FleetManager {
                 String[] parts = line.split(",");
                 if (parts.length < 5) {
                     line = br.readLine(); idx++;
-                    continue; 
+                    continue;
                 }
                 String type = parts[0].trim();
                 String id = parts[1].trim();
@@ -380,7 +380,7 @@ public class FleetManager {
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid number format in line No. " + idx );
                     line = br.readLine(); idx++;
-                    continue; 
+                    continue;
                 }
 
                 try {
@@ -388,13 +388,13 @@ public class FleetManager {
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid number format in line No. " + idx );
                     line = br.readLine(); idx++;
-                    continue; 
+                    continue;
                 }
-                
+
                 if (type.isEmpty() || id.isEmpty() || model.isEmpty() ) {
                     System.out.println("Invalid data in line No. " + idx );
                     line = br.readLine(); idx++;
-                    continue; 
+                    continue;
                 }
 
 
@@ -444,7 +444,7 @@ public class FleetManager {
                         double fuelLevel = 0;
                         if (hasSail==false){
                             CargoShipFuel ship = new CargoShipFuel(id, model, maxSpeed, currentCargo, fuelLevel);
-                            this.addVehicle(ship);                   
+                            this.addVehicle(ship);
                         } else{
                             CargoShipSail ship = new CargoShipSail(id, model, maxSpeed, currentCargo);
                             this.addVehicle(ship);
@@ -452,7 +452,7 @@ public class FleetManager {
                         break;
                     }
 
-                    default: 
+                    default:
                 }
                 System.out.println("Loaded vehicle from line No. " + idx );
                 line = br.readLine(); idx++;
